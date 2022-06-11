@@ -38,6 +38,16 @@ body {
   min-width: 300px;
   max-width: 60%;
   overflow: hidden;
+
+  --space-1: 1rem;
+  --space-2: 2rem;
+  --tab-accent: #32bbaf;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tab {
+    scroll-behavior: smooth;
+  }
 }
 
 .tab-header {
@@ -49,7 +59,7 @@ body {
 }
 
 .tab-header a {
-  padding: 1rem 2rem;
+  padding: var(--space-1) var(--space-2);
   display: block;
   color: black;
   font-weight: 500;
@@ -58,8 +68,14 @@ body {
   flex-shrink: 0;
 }
 
+
+.tab-header a:focus {
+  outline: 1px solid var(--tab-accent);
+  outline-offset: -1px; 
+}
+
 .tab-header a:hover {
-  background-color: #eaf3f2;
+  background-color: rgba(var( --tab-accent), 0.1);
 }
 
 .tab-content {
