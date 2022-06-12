@@ -45,7 +45,8 @@ body {
 
   --reset-light: #e25555;
   --reset-dark: #d36c6c;
-  --reset: var(--reset-light) --text-light: #fff;
+  --reset: var(--reset-light);
+  --text-light: #fff;
   --text-dark: #fff;
   --text: var(--text-light);
   --border-radius: 0.5ch;
@@ -97,4 +98,107 @@ body {
   color: var(--text);
   box-shadow: 0 1px var(--shadow-spread) var(--shadow);
   border-color: var(--accent);
+}
+
+
+@keyframes fadeIn {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  --animation-direction: normal;
+  --animation-reduced: ;
+  --animation-motion-ok: fadeIn 0.3s ease var(--animation-direction) forwards;
+  --animation: var(--animation-reduced);
+  animation: var(--animation);
+}
+
+.fade-in.reverse {
+  --animation-direction: reverse;
+}
+
+
+.dialog {
+  --bg-elevated-dark: rgb(38, 45, 46);
+  --bg-elevated-light: rgb(214, 231, 233);
+  --bg-elevated: var(--bg-elevated-dark);
+
+  --bg-normal-dark: rgb(19, 19, 19);
+  --bg-normal-light: rgb(255, 255, 255);
+  --bg-normal: var(--bg-normal-dark);
+
+  --text-color-dark: rgb(255, 255, 255);
+  --text-color-light: rgb(7, 23, 24);
+  --text-color: var(--text-color-dark);
+
+
+  background: var(--bg-normal);
+  color: var(--text-color);
+  fill: var(--text-color);
+
+  max-width: 60%;
+  min-width: 200px;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-gap: 1rem;
+  animation: var(--animation);
+}
+
+:where(.flex) {
+  display: flex;
+}
+
+:where(.flex .center) {
+  align-items: center;
+}
+
+:where(.dialog header, .dialog footer) {
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+:where(.dialog header) {
+  justify-content: space-between;
+  font-size: 0.7em;
+}
+
+.gap-1 {
+  gap: 1rem;
+}
+
+:where(.dialog header svg, .dialog header .dismiss) {
+  height: 2rem;
+  width: 2rem;
+}
+
+:where(.dialog header .dismiss) {
+  background: var(--bg-elevated);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.2rem;
+  border-color: var(--text-color);
+  opacity: 0.5;
+}
+
+
+:where(.dialog footer) {
+  justify-content: flex-end;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dialog {
+    --animation: var(--animation-motion-ok);
+  }
 }
