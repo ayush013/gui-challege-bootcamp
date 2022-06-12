@@ -29,18 +29,15 @@ export default class Dialog {
     backdrop.appendChild(dialog);
     this.backdropRef = backdrop;
 
-    const dismissBtn = this.backdropRef.querySelector(".dismiss");
-    const cancelBtn = this.backdropRef.querySelector(".cancel");
-
-    [cancelBtn, dismissBtn].forEach(this.attachDismissListener);
+    this.attachDismissListener();
 
     document.body.appendChild(backdrop);
 
     this.addFocusToCancelButton();
   }
 
-  attachDismissListener = (dismissBtn) => {
-    const dismissBtnHandler = () => {
+  attachDismissListener = () => {
+    const dismissBtnHandler = (dismissBtn) => {
       const dialog = this.backdropRef.querySelector(".dialog");
       dialog.classList.remove("fade-in");
 
@@ -51,10 +48,20 @@ export default class Dialog {
         dialog.classList.add("fade-in");
       });
 
-      dialog.addEventListener("animationend", this.dismissDialog.bind(this));
+      const { matches: motionOK } = window.matchMedia(
+        "(prefers-reduced-motion: no-preference)"
+      );
+
+      if (motionOK) {
+        dialog.addEventListener("animationend", this.dismissDialog.bind(this));
+      } else {
+        this.dismissDialog();
+      }
     };
 
-    dismissBtn.addEventListener("click", dismissBtnHandler);
+    this.backdropRef.addEventListener("click", (e) => {
+      e.target.classList.contains("close") && dismissBtnHandler(e.target);
+    });
   };
 
   addFocusToCancelButton() {

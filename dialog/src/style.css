@@ -206,6 +206,12 @@ body {
   width: 2rem;
 }
 
+
+.dialog>header>.dismiss>svg {
+  pointer-events: none;
+}
+
+
 :where(.dialog header .dismiss) {
   background: var(--bg-elevated);
   border-radius: 50%;
