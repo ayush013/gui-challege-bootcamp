@@ -29,16 +29,22 @@ export default class Dialog {
     backdrop.appendChild(dialog);
     this.backdropRef = backdrop;
 
-    this.attachDismissListener();
+    const dismissBtn = this.backdropRef.querySelector(".dismiss");
+    const cancelBtn = this.backdropRef.querySelector(".cancel");
+
+    [cancelBtn, dismissBtn].forEach(this.attachDismissListener);
 
     document.body.appendChild(backdrop);
+
+    this.addFocusToCancelButton();
   }
 
-  attachDismissListener() {
-    const dismissBtn = this.backdropRef.querySelector(".dismiss");
-    dismissBtn.addEventListener("click", () => {
+  attachDismissListener = (dismissBtn) => {
+    const dismissBtnHandler = () => {
       const dialog = this.backdropRef.querySelector(".dialog");
       dialog.classList.remove("fade-in");
+
+      dismissBtn.removeEventListener("click", dismissBtnHandler);
 
       requestAnimationFrame(() => {
         dialog.classList.add("reverse");
@@ -46,7 +52,14 @@ export default class Dialog {
       });
 
       dialog.addEventListener("animationend", this.dismissDialog.bind(this));
-    });
+    };
+
+    dismissBtn.addEventListener("click", dismissBtnHandler);
+  };
+
+  addFocusToCancelButton() {
+    const cancelBtn = this.backdropRef.querySelector(".cancel");
+    cancelBtn.focus();
   }
 
   dismissDialog() {

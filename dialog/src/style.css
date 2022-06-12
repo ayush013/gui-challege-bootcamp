@@ -33,15 +33,16 @@ body {
   padding: 0;
 }
 
-:where(button) {
-
-  --padding-y: 1ch;
-  --padding-x: 2ch;
-  --size: 1.1rem;
-
+:root {
   --accent-light: #23a197;
   --accent-dark: #34635f;
   --accent: var(--accent-light);
+}
+
+:where(button) {
+  --padding-y: 1ch;
+  --padding-x: 2ch;
+  --size: 1.1rem;
 
   --reset-light: #e25555;
   --reset-dark: #d36c6c;
@@ -83,9 +84,12 @@ body {
     background: rgb(2, 20, 20);
   }
 
+  :root {
+    --accent: var(--accent-dark);
+  }
+
   :where(button, input[type=button], input[type=submit], input[type=reset]),
   :where(input[type=file])::file-selector-button {
-    --accent: var(--accent-dark);
     --reset: var(--reset-dark);
     --text: var(--text-dark);
     --shadow: var(--shadow-dark);
@@ -93,7 +97,13 @@ body {
 }
 
 
-:where(button) {
+:where(.cancel) {
+  background: transparent;
+  color: var(--reset);
+  border-color: var(--reset);
+}
+
+:where(button):not(.cancel) {
   background: var(--accent);
   color: var(--text);
   box-shadow: 0 1px var(--shadow-spread) var(--shadow);
@@ -127,18 +137,17 @@ body {
 
 
 .dialog {
-  --bg-elevated-dark: rgb(38, 45, 46);
-  --bg-elevated-light: rgb(214, 231, 233);
-  --bg-elevated: var(--bg-elevated-dark);
+  --bg-elevated-dark: rgb(27, 33, 34);
+  --bg-elevated-light: rgb(229, 237, 238);
+  --bg-elevated: var(--bg-elevated-light);
 
   --bg-normal-dark: rgb(19, 19, 19);
   --bg-normal-light: rgb(255, 255, 255);
-  --bg-normal: var(--bg-normal-dark);
+  --bg-normal: var(--bg-normal-light);
 
   --text-color-dark: rgb(255, 255, 255);
   --text-color-light: rgb(7, 23, 24);
-  --text-color: var(--text-color-dark);
-
+  --text-color: var(--text-color-light);
 
   background: var(--bg-normal);
   color: var(--text-color);
@@ -146,12 +155,20 @@ body {
 
   max-width: 60%;
   min-width: 200px;
-  padding: 0.5rem;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
+  overflow: auto;
   display: grid;
   grid-template-rows: auto 1fr auto;
   grid-gap: 1rem;
   animation: var(--animation);
+}
+
+@media (prefers-color-scheme: dark) {
+  .dialog {
+    --bg-elevated: var(--bg-elevated-dark);
+    --bg-normal: var(--bg-normal-dark);
+    --text-color: var(--text-color-dark);
+  }
 }
 
 :where(.flex) {
@@ -162,9 +179,17 @@ body {
   align-items: center;
 }
 
-:where(.dialog header, .dialog footer) {
+:where(.dialog header, .dialog footer, .dialog main) {
   gap: 1rem;
   padding: 0.5rem 1rem;
+  background: var(--bg-elevated);
+  padding: 0.8rem;
+}
+
+:where(.dialog main) {
+  background: var(--bg-normal);
+  max-height: 70vh;
+  overflow: auto;
 }
 
 :where(.dialog header) {
@@ -192,7 +217,6 @@ body {
   opacity: 0.5;
 }
 
-
 :where(.dialog footer) {
   justify-content: flex-end;
 }
@@ -201,4 +225,8 @@ body {
   .dialog {
     --animation: var(--animation-motion-ok);
   }
+}
+
+::selection {
+  background-color: var(--accent);
 }
