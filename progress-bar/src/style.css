@@ -22,7 +22,8 @@ body {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 4rem;
 }
 
 *,
@@ -76,6 +77,63 @@ body {
   cursor: pointer;
   user-select: none;
   text-transform: capitalize;
+  background: var(--accent);
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.progress-bar {
+  --height: 0.5rem;
+  --roundness: 0.5rem;
+
+  --progress-color-light: #6442fb;
+  --progress-color-dark: #796faa;
+  --progress-color: var(--progress-color-light);
+
+  --bg-color-light: #dddbeb;
+  --bg-color-dark: #292636;
+  --bg-color: var(--bg-color-light);
+
+  width: 90%;
+  position: relative;
+  height: var(--height);
+  border-radius: var(--roundness);
+  overflow: hidden;
+  background-color: var(--bg-color);
+}
+
+
+
+@media screen and (min-width: 767px) {
+  .progress-bar {
+    max-width: 60%;
+  }
+}
+
+:where(.progress-bar .progress) {
+  background-color: var(--progress-color);
+  width: 50%;
+  height: var(--height);
+  border-radius: var(--roundness);
+  transform-origin: start;
+  transition: width 0.4s ease;
+}
+
+@keyframes loaderIndeterminate {
+  from {
+    transform: scaleX(0.4) translateX(-100%);
+  }
+
+  to {
+    transform: scaleX(0.4) translateX(100%);
+  }
+}
+
+.indeterminate {
+  animation: loaderIndeterminate 1s ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  /* animation: name duration timing-function delay iteration-count direction fill-mode; */
 }
 
 
@@ -88,10 +146,16 @@ body {
     --accent: var(--accent-dark);
   }
 
-  :where(button, input[type=button], input[type=submit], input[type=reset]),
-  :where(input[type=file])::file-selector-button {
+  :where(button) {
     --reset: var(--reset-dark);
     --text: var(--text-dark);
     --shadow: var(--shadow-dark);
   }
+
+
+  .progress-bar {
+    --progress-color: var(--progress-color-dark);
+    --bg-color: var(--bg-color-dark);
+  }
+
 }
