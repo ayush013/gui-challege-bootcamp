@@ -24,6 +24,7 @@ body {
   flex-wrap: wrap;
   flex-direction: column;
   gap: 4rem;
+  color: var(--text);
 }
 
 *,
@@ -38,6 +39,10 @@ body {
   --accent-light: #23a197;
   --accent-dark: #34635f;
   --accent: var(--accent-light);
+
+  --text-light: #fff;
+  --text-dark: #fff;
+  --text: var(--text-light);
 }
 
 :where(button) {
@@ -48,9 +53,7 @@ body {
   --reset-light: #e25555;
   --reset-dark: #d36c6c;
   --reset: var(--reset-light);
-  --text-light: #fff;
-  --text-dark: #fff;
-  --text: var(--text-light);
+
   --border-radius: 0.5ch;
 
   --shadow-light: rgba(18, 112, 104, 0.5);
@@ -82,60 +85,6 @@ body {
   border-color: var(--accent);
 }
 
-.progress-bar {
-  --height: 0.5rem;
-  --roundness: 0.5rem;
-
-  --progress-color-light: #6442fb;
-  --progress-color-dark: #796faa;
-  --progress-color: var(--progress-color-light);
-
-  --bg-color-light: #dddbeb;
-  --bg-color-dark: #292636;
-  --bg-color: var(--bg-color-light);
-
-  width: 90%;
-  position: relative;
-  height: var(--height);
-  border-radius: var(--roundness);
-  overflow: hidden;
-  background-color: var(--bg-color);
-}
-
-
-
-@media screen and (min-width: 767px) {
-  .progress-bar {
-    max-width: 60%;
-  }
-}
-
-:where(.progress-bar .progress) {
-  background-color: var(--progress-color);
-  width: 50%;
-  height: var(--height);
-  border-radius: var(--roundness);
-  transform-origin: start;
-  transition: width 0.4s ease;
-}
-
-@keyframes loaderIndeterminate {
-  from {
-    transform: scaleX(0.4) translateX(-100%);
-  }
-
-  to {
-    transform: scaleX(0.4) translateX(100%);
-  }
-}
-
-.indeterminate {
-  animation: loaderIndeterminate 1s ease-in-out;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  /* animation: name duration timing-function delay iteration-count direction fill-mode; */
-}
-
 
 @media (prefers-color-scheme: dark) {
   body {
@@ -144,18 +93,69 @@ body {
 
   :root {
     --accent: var(--accent-dark);
+    --text: var(--text-dark);
+
   }
 
   :where(button) {
     --reset: var(--reset-dark);
-    --text: var(--text-dark);
     --shadow: var(--shadow-dark);
   }
 
+}
 
-  .progress-bar {
-    --progress-color: var(--progress-color-dark);
-    --bg-color: var(--bg-color-dark);
+.toast {
+  --bg-color: var(--bg-color-dark);
+}
+
+.toast-container {
+  position: fixed;
+  z-index: 1;
+  pointer-events: none;
+  bottom: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  flex-direction: column;
+  height: 100%;
+}
+
+.toast {
+  --bg-color-light: #333333;
+  --bg-color-dark: #333333;
+  --bg-color: var(--bg-color-light);
+
+  --padding: 1rem;
+
+  --animation-ok: fadeIn 0.5s ease, fadeOut 0.25s ease 3s forwards;
+  --animation-reduced: ;
+  --animation: var(--animation-reduced);
+
+  font-weight: 600;
+  background-color: var(--bg-color);
+  padding: var(--padding);
+  border-radius: calc(var(--padding) / 4);
+  animation: var(--animation);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
   }
+}
 
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .toast {
+    --animation: var(--animation-ok);
+  }
 }
