@@ -138,6 +138,7 @@ body {
   padding: var(--padding);
   border-radius: calc(var(--padding) / 4);
   animation: var(--animation);
+  white-space: pre;
 }
 
 @keyframes fadeIn {

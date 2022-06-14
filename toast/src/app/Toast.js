@@ -20,12 +20,12 @@ class Toast {
 
   getRandomText() {
     const randomString =
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Error voluptatum cum numquam aliquam placeat, minus, ullam reprehenderit perspiciatis maxime nam porro odio esse in magnam adipisci dicta similique incidunt nemo";
+      "Lorem ipsum dolor \n sit amet consectetur adipisicing elit.\n Error voluptatum cum numquam aliquam placeat, minus,\n ullam reprehenderit perspiciatis maxime \n nam porro odio esse \n in magnam adipisci dicta similique incidunt nemo";
 
     const text = randomString
       .split(" ")
       .slice(
-        parseInt((Math.random() * randomString.length) / 2),
+        parseInt(Math.random() * randomString.length),
         parseInt(Math.random() * randomString.length)
       )
       .join(" ");
