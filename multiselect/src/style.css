@@ -17,13 +17,7 @@ body {
   font-size: 1rem;
   font-weight: 400;
   min-height: 100vh;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  flex-direction: column;
-  gap: 4rem;
+  color: white;
 }
 
 *,
@@ -97,5 +91,55 @@ body {
     --shadow: var(--shadow-dark);
   }
 
+}
 
+.checkbox-group {
+  display: grid;
+  grid-template-columns: minmax(200px, 25%) auto;
+
+  --bg-color: rgba(238, 238, 238, 0.1);
+}
+
+:where(.checkbox-group aside, main) {
+  padding: 2rem;
+}
+
+:where(.checkbox-group aside form) {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+:where(.checkbox-group aside fieldset) {
+  padding: 1rem;
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-color: rgba(214, 194, 194, 0.1);
+}
+
+:where(.checkbox-group .input-group) {
+  padding: 0.2rem;
+  border-radius: 0.2rem;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+:where(.checkbox-group .input-group, label, input) {
+  cursor: pointer;
+}
+
+:where(.checkbox-group .input-group label) {
+  width: 100%;
+}
+
+:where(.checkbox-group .input-group:hover, .input-group:focus-within, aside fieldset) {
+  background-color: var(--bg-color)
+}
+
+:where(.checkbox-group .input-group input[type=checkbox]) {
+  accent-color: #32bbaf;
 }
