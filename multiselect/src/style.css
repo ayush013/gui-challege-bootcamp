@@ -1,0 +1,101 @@
+/* Basic reset */
+
+html {
+  font-size: 16px;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --accent-light: #23a197;
+  --accent-dark: #34635f;
+  --accent: var(--accent-light);
+}
+
+:where(button) {
+  --padding-y: 1ch;
+  --padding-x: 2ch;
+  --size: 1.1rem;
+
+  --reset-light: #e25555;
+  --reset-dark: #d36c6c;
+  --reset: var(--reset-light);
+  --text-light: #fff;
+  --text-dark: #fff;
+  --text: var(--text-light);
+  --border-radius: 0.5ch;
+
+  --shadow-light: rgba(18, 112, 104, 0.5);
+  --shadow-dark: rgba(19, 104, 97, 0.5);
+  --shadow: var(--shadow-light);
+
+  --shadow-spread: 10px;
+  --shadow-spread-sm: 2px;
+
+  --transition-motion-reduce: ;
+  --transition-motion-ok: box-shadow 0.25s ease, outline-offset 0.25s ease;
+
+
+  padding: var(--padding-y) var(--padding-x);
+  font-size: var(--size);
+  font-weight: 600;
+
+  border-radius: var(--border-radius);
+  transition: var(--transition-motion-reduce);
+  border-width: 2px;
+  border-style: solid;
+  letter-spacing: inherit;
+  line-height: 1.5;
+  cursor: pointer;
+  user-select: none;
+  text-transform: capitalize;
+  background: var(--accent);
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: rgb(2, 20, 20);
+  }
+
+  :root {
+    --accent: var(--accent-dark);
+  }
+
+  :where(button) {
+    --reset: var(--reset-dark);
+    --text: var(--text-dark);
+    --shadow: var(--shadow-dark);
+  }
+
+
+}
