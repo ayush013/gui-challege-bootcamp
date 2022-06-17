@@ -18,6 +18,8 @@ body {
   font-weight: 400;
   min-height: 100vh;
   color: white;
+  display: grid;
+  place-items: center;
 }
 
 *,
@@ -29,7 +31,154 @@ body {
 }
 
 :root {
-  --accent-light: #23a197;
-  --accent-dark: #34635f;
+  --accent-light: #0d58e4;
+  --accent-dark: #2980b9;
   --accent: var(--accent-light);
+
+  --accent-300-light: #2769e6;
+  --accent-300-dark: #196da5;
+  --accent-300: var(--accent-300-light);
+
+  --bg-light: white;
+  --bg-dark: rgb(2, 20, 20);
+  --bg: var(--bg-light);
+}
+
+
+.button-group {
+  --size: 1rem;
+
+  --text-color-light: black;
+  --text-color-dark: white;
+  --text-color: var(--text-color-light);
+
+  --btn-text-color: var(--text-color-dark);
+  --text-color-inverse: var(--text-color-dark);
+
+  display: flex;
+  align-items: stretch;
+  border-radius: 0.5rem;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: var(--bg-dark);
+  }
+
+  :root {
+    --accent: var(--accent-dark);
+    --bg: var(--bg-dark);
+    --bg-100: var(--bg-100-dark);
+    --accent-300: var(--accent-300-dark);
+  }
+
+
+  .button-group {
+    --text-color: var(--text-color-dark);
+    --text-color-inverse: var(--text-color-light);
+  }
+
+}
+
+:where(.button-group .primary-button) {
+  --padding-x: 3ch;
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+:where(.button-group .caret-button) {
+  --padding-x: 1ch;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+:where(.button-group .caret-button svg) {
+  animation: var(--animation);
+  transition: transform 0.4s ease;
+}
+
+:where(.button-group .primary-button, .caret-button) {
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
+  letter-spacing: 0.02ch;
+  position: relative;
+
+  background-color: var(--accent);
+  color: var(--btn-text-color);
+  fill: var(--btn-text-color);
+  font-size: var(--size);
+  padding: 1ch var(--padding-x);
+}
+
+:where(.button-group .primary-button, .caret-button):where(:hover, :focus-within, :active) {
+  background-color: var(--accent-300);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :where(.button-group .caret-button):where(:active, :focus-within)>svg {
+    transform: rotate(180deg);
+  }
+
+  :where(.button-group .caret-button .menu) {
+    transform: translateY(10px);
+  }
+
+}
+
+:where(.button-group .caret-button .menu) {
+  position: absolute;
+  background: var(--bg);
+
+  box-shadow: 0 0.2rem 1rem rgba(7, 9, 29, 0.2);
+  bottom: 2.5rem;
+  opacity: 0;
+  pointer-events: none;
+  border-radius: 0.4rem;
+  color: var(--text-color);
+  list-style: none;
+  transition: all 0.2s ease;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-width: 9rem;
+  overflow: hidden;
+}
+
+:where(.button-group .caret-button):where(:active, :focus-within) .menu {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+:where(.button-group .caret-button .menu button) {
+  padding: 0.7rem 1rem;
+  font-size: 0.9em;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  border: none;
+  font-weight: 600;
+  user-select: none;
+}
+
+:where(.button-group .caret-button .menu button .icon) {
+  height: 1.1rem;
+  fill: var(--text-color);
+}
+
+:where(.button-group .caret-button .menu button):where(:hover, :focus-within, .icon) {
+  background: var(--accent);
+  color: var(--text-color-inverse);
+}
+
+:where(.button-group .caret-button .menu button):where(:focus-within, :hover)>.icon {
+  fill: var(--text-color-inverse);
+  transition: all 0.2s ease;
 }
