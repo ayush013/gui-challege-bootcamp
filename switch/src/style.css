@@ -17,7 +17,7 @@
     font-size: 1rem;
     font-weight: 400;
     min-height: 100vh;
-    color: white;
+    color: black;
     display: grid;
     place-items: center;
   }
@@ -32,19 +32,48 @@
 }
 
 :root {
-  --accent-light: #0d58e4;
-  --accent-dark: #2980b9;
-  --accent: var(--accent-light);
-
   --bg-light: white;
   --bg-dark: rgb(2, 20, 20);
   --bg: var(--bg-light);
 }
 
 
+.switch-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  align-items: center;
+}
+
+.switch {
+  --width: 4rem;
+  --height: 2rem;
+  --padding: 0.3rem;
+
+  --toggle: white;
+
+  --active-light: #0d58e4;
+  --active-dark: #2980b9;
+  --active: var(--active-light);
+
+  --inactive-light: #333;
+  --inactive-dark: #333;
+  --inactive: var(--inactive-light);
+
+  height: var(--height);
+  width: var(--width);
+  background-color: var(--inactive);
+  border-radius: var(--height);
+  overflow: hidden;
+  padding: var(--padding);
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
 @media (prefers-color-scheme: dark) {
   body {
     background: var(--bg-dark);
+    color: white;
   }
 
   :root {
@@ -52,7 +81,44 @@
     --bg: var(--bg-dark);
   }
 
+  .switch {
+    --active: var(--active-dark);
+    --inactive: var(--inactive-dark);
+  }
+
 }
 
 
-@media (prefers-reduced-motion: no-preference) {}
+.switch>input[type=checkbox] {
+  height: var(--height);
+  width: var(--width);
+  cursor: pointer;
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+
+.switch>.toggle {
+  width: calc(var(--height) - (var(--padding) * 2));
+  height: calc(var(--height) - (var(--padding) * 2));
+
+  background-color: var(--toggle);
+  z-index: 0;
+  border-radius: 50%;
+}
+
+.switch>input[type=checkbox]:checked+.toggle {
+  transform: translateX(calc(var(--width) / 2));
+}
+
+.switch.active {
+  background-color: var(--active);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .switch>.toggle {
+    transition: transform 0.2s ease;
+  }
+}
