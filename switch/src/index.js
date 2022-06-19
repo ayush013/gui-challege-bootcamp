@@ -31,13 +31,19 @@ import "./style.css";
     }
   });
 
-  switchInput.addEventListener("dragstart", (e) => {
-    drag.startX = e.offsetX;
-    toggle.classList.remove("click-toggle");
-  });
+  const dragstart = (e) => {
+    const isTouchEvent = e instanceof TouchEvent;
 
-  switchInput.addEventListener("dragover", (e) => {
-    const distance = e.offsetX - drag.startX;
+    drag.startX = isTouchEvent ? e.touches[0].clientX : e.offsetX;
+    toggle.classList.remove("click-toggle");
+  };
+
+  const dragmove = (e) => {
+    const isTouchEvent = e instanceof TouchEvent;
+
+    const offset = isTouchEvent ? e.touches[0].clientX : e.offsetX;
+    const distance = offset - drag.startX;
+
     const isForwardToggle = distance > 0;
 
     const translateX = isForwardToggle
@@ -47,10 +53,13 @@ import "./style.css";
     if (Math.abs(distance) <= drag.trackWidth - drag.toggleWidth) {
       toggle.style.setProperty("transform", `translateX(${translateX}px)`);
     }
-  });
+  };
 
-  switchInput.addEventListener("dragend", (e) => {
-    const distance = e.offsetX - drag.startX;
+  const dragend = (e) => {
+    const isTouchEvent = e instanceof TouchEvent;
+
+    const offset = isTouchEvent ? e.changedTouches[0]?.clientX : e.offsetX;
+    const distance = offset - drag.startX;
 
     toggle.style.removeProperty("transform");
     toggle.classList.add("click-toggle");
@@ -58,5 +67,13 @@ import "./style.css";
     if (Math.abs(distance) >= (drag.trackWidth - drag.toggleWidth) / 2) {
       switchInput.click();
     }
-  });
+  };
+
+  switchInput.addEventListener("dragstart", dragstart);
+  switchInput.addEventListener("dragover", dragmove);
+  switchInput.addEventListener("dragend", dragend);
+
+  switchInput.addEventListener("touchstart", dragstart);
+  switchInput.addEventListener("touchmove", dragmove);
+  switchInput.addEventListener("touchend", dragend);
 })();
