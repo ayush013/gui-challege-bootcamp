@@ -34,14 +34,14 @@ import "./style.css";
   const dragstart = (e) => {
     const isTouchEvent = e instanceof TouchEvent;
 
-    drag.startX = isTouchEvent ? e.touches[0].clientX : e.offsetX;
+    drag.startX = isTouchEvent ? e.targetTouches[0].clientX : e.offsetX;
     toggle.classList.remove("click-toggle");
   };
 
   const dragmove = (e) => {
     const isTouchEvent = e instanceof TouchEvent;
 
-    const offset = isTouchEvent ? e.touches[0].clientX : e.offsetX;
+    const offset = isTouchEvent ? e.targetTouches[0].clientX : e.offsetX;
     const distance = offset - drag.startX;
 
     const isForwardToggle = distance > 0;
