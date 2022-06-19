@@ -74,7 +74,7 @@
 }
 
 
-.switch:hover {
+.switch:hover, .switch:focus-within {
   box-shadow: 0 0 5px var(--active);
   outline-color: var(--active);
 }
