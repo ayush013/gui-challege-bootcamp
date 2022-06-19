@@ -6,12 +6,6 @@ import "./style.css";
   const toggle = document.querySelector(".toggle");
 
   const drag = {
-    paddding: Number(
-      window
-        .getComputedStyle(switchGroup)
-        .getPropertyValue("padding")
-        .split("px")?.[0]
-    ),
     trackWidth:
       switchInput.getBoundingClientRect().width -
       2 *
@@ -38,30 +32,25 @@ import "./style.css";
   });
 
   switchInput.addEventListener("dragstart", (e) => {
-    drag.startX = e.offsetX - drag.paddding;
+    drag.startX = e.offsetX;
     toggle.classList.remove("click-toggle");
   });
+
   switchInput.addEventListener("dragover", (e) => {
-    const distance = e.offsetX - drag.startX - drag.paddding;
+    const distance = e.offsetX - drag.startX;
     const isForwardToggle = distance > 0;
 
-    if (isForwardToggle) {
-      if (distance <= drag.trackWidth - drag.toggleWidth) {
-        toggle.style.setProperty("transform", `translateX(${distance}px)`);
-      }
-    } else {
-      if (Math.abs(distance) <= drag.trackWidth - drag.toggleWidth) {
-        toggle.style.setProperty(
-          "transform",
-          `translateX(${
-            drag.trackWidth - drag.toggleWidth - Math.abs(distance)
-          }px)`
-        );
-      }
+    const translateX = isForwardToggle
+      ? distance
+      : drag.trackWidth - drag.toggleWidth - Math.abs(distance);
+
+    if (Math.abs(distance) <= drag.trackWidth - drag.toggleWidth) {
+      toggle.style.setProperty("transform", `translateX(${translateX}px)`);
     }
   });
+
   switchInput.addEventListener("dragend", (e) => {
-    const distance = e.offsetX - drag.startX - drag.paddding;
+    const distance = e.offsetX - drag.startX;
 
     toggle.style.removeProperty("transform");
     toggle.classList.add("click-toggle");
