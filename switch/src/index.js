@@ -42,17 +42,31 @@ import "./style.css";
     toggle.classList.remove("click-toggle");
   });
   switchInput.addEventListener("dragover", (e) => {
-    const distance = e.offsetX - drag.startX;
-    console.log(distance, drag.trackWidth);
-    if (distance <= drag.trackWidth - drag.toggleWidth) {
-      toggle.style.setProperty("transform", `translateX(${distance}px)`);
+    const distance = e.offsetX - drag.startX - drag.paddding;
+    const isForwardToggle = distance > 0;
+
+    if (isForwardToggle) {
+      if (distance <= drag.trackWidth - drag.toggleWidth) {
+        toggle.style.setProperty("transform", `translateX(${distance}px)`);
+      }
+    } else {
+      if (Math.abs(distance) <= drag.trackWidth - drag.toggleWidth) {
+        toggle.style.setProperty(
+          "transform",
+          `translateX(${
+            drag.trackWidth - drag.toggleWidth - Math.abs(distance)
+          }px)`
+        );
+      }
     }
   });
   switchInput.addEventListener("dragend", (e) => {
-    const distance = e.offsetX - drag.startX;
-    if (distance >= (drag.trackWidth - drag.toggleWidth) / 2) {
-      toggle.style.removeProperty("transform");
-      toggle.classList.add("click-toggle");
+    const distance = e.offsetX - drag.startX - drag.paddding;
+
+    toggle.style.removeProperty("transform");
+    toggle.classList.add("click-toggle");
+
+    if (Math.abs(distance) >= (drag.trackWidth - drag.toggleWidth) / 2) {
       switchInput.click();
     }
   });
