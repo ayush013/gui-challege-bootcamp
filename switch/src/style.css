@@ -56,9 +56,11 @@
   --active-dark: #2980b9;
   --active: var(--active-light);
 
-  --inactive-light: #333;
+  --inactive-light: rgb(134, 134, 134);
   --inactive-dark: #333;
   --inactive: var(--inactive-light);
+
+  --transition-duration: 0.2s;
 
   height: var(--height);
   width: var(--width);
@@ -67,8 +69,16 @@
   overflow: hidden;
   padding: var(--padding);
   position: relative;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  outline: 1px solid transparent;
 }
+
+
+.switch:hover {
+  box-shadow: 0 0 5px var(--active);
+  outline-color: var(--active);
+}
+
 
 @media (prefers-color-scheme: dark) {
   body {
@@ -87,7 +97,6 @@
   }
 
 }
-
 
 .switch>input[type=checkbox] {
   height: var(--height);
@@ -113,12 +122,16 @@
   transform: translateX(calc(var(--width) / 2));
 }
 
+.switch>input[type=checkbox]:disabled+.toggle {
+  opacity: 0.6;
+}
+
 .switch.active {
   background-color: var(--active);
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .switch>.toggle {
-    transition: transform 0.2s ease;
+  .click-toggle {
+    transition: transform var(--transition-duration) ease;
   }
 }
