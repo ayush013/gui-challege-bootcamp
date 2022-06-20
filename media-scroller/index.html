@@ -4,8 +4,26 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Switch</title>
+    <title>Media scroller</title>
   </head>
 
-  <body></body>
+  <body>
+    <h1>Latest photographs</h1>
+    <section class="media-scroller">
+      <ul></ul>
+    </section>
+
+    <template id="media">
+      <li>
+        <a target="_blank" rel="noreferrer">
+          <figure>
+            <picture>
+              <img loading="lazy" />
+            </picture>
+            <figcaption></figcaption>
+          </figure>
+        </a>
+      </li>
+    </template>
+  </body>
 </html>

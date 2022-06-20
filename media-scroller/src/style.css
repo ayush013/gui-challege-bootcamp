@@ -24,9 +24,8 @@
     font-weight: 400;
     min-height: 100vh;
     color: black;
-    display: grid;
-    place-items: center;
     background-color: var(--bg);
+    padding: 2rem;
   }
 
   *,
@@ -45,7 +44,67 @@
   }
 
   :root {
+    color-scheme: dark;
     --bg: var(--bg-dark);
   }
 
+}
+
+.media-scroller {
+  --width: 25rem;
+  padding-top: 2rem;
+}
+
+.media-scroller ul {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 1rem;
+
+  overflow-x: auto;
+
+  scroll-snap-type: x mandatory;
+
+  list-style: none;
+}
+
+.media-scroller ul li img {
+  width: var(--width);
+  object-fit: cover;
+  background-color: #333;
+  border-radius: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.media-scroller ul li:first-child {
+  padding-left: 0;
+}
+
+.media-scroller ul li {
+  padding: 0.5rem;
+  scroll-snap-align: start;
+}
+
+.media-scroller ul li a {
+  color: inherit;
+  outline-offset: 5px;
+}
+
+.media-scroller ul li figcaption {
+  padding-top: 0.5rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .media-scroller {
+    scroll-behavior: smooth;
+  }
+
+  .media-scroller ul li:hover img {
+    transform: scale(1.05);
+  }
+}
+
+@supports(aspect-ratio: 1) {
+  .media-scroller>ul>li img {
+    aspect-ratio: 4/3;
+  }
 }
