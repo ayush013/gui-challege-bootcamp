@@ -16,6 +16,10 @@
     --bg-light: white;
     --bg-dark: rgb(2, 20, 20);
     --bg: var(--bg-light);
+
+    --text-light: black;
+    --text-dark: white;
+    --text: var(--text-light);
   }
 
   body {
@@ -40,6 +44,89 @@
 }
 
 
+
+.settings {
+  --background-dark: #333;
+  --background-light: #d6d6d6;
+  --background: var(--background-light);
+
+  --accent-light: #32bbaf;
+  --accent-dark: #7cd6cf;
+  --accent: var(--accent-light);
+
+  --highlight-light: rgba(255, 255, 255, 0.336);
+  --highlight-dark: rgba(0, 0, 0, 0.322);
+  --highlight: var(--highlight-light);
+
+  --space-md: 2rem;
+  --space-lg: 4rem;
+  --space-sm: 1rem;
+  --space: var(--space-sm);
+
+  min-width: 300px;
+  max-width: 90vw;
+  width: 50vw;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  accent-color: var(--accent);
+
+  fill: var(--accent);
+}
+
+@media (min-width: 700px) {
+  .settings {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+.settings>section {
+  display: grid;
+  grid-auto-flow: row;
+  gap: 2rem;
+}
+
+.settings>section>fieldset {
+  border-radius: 1rem;
+  background-color: var(--background);
+  border: none;
+}
+
+
+.settings>section>fieldset>.item {
+  display: flex;
+  gap: var(--space-sm);
+  transition: background-color 0.2s ease;
+  padding: 2rem;
+}
+
+.settings>section>fieldset>.item:where(:focus-within, :hover) {
+  background-color: var(--highlight);
+  fill: var(--text);
+}
+
+.settings>section>fieldset>.item>.icon>svg {
+  padding: 0.4rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  height: 2rem;
+  width: 2rem;
+}
+
+.settings>section>fieldset>.item:where(:focus-within, :hover) .icon>svg {
+  background-color: var(--accent);
+}
+
+
+.settings>section>fieldset>.item>label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
 @media (prefers-color-scheme: dark) {
   body {
     color: white;
@@ -48,6 +135,13 @@
   :root {
     color-scheme: dark;
     --bg: var(--bg-dark);
+    --text: var(--text-dark);
+  }
+
+  .settings {
+    --accent: var(--accent-dark);
+    --background: var(--background-dark);
+    --highlight: var(--highlight-dark);
   }
 
 }
