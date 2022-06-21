@@ -72,7 +72,7 @@ body {
 
 .tab-header a:focus:not(:active) {
   outline: 1px solid var(--tab-accent);
-  outline-offset: -1px; 
+  outline-offset: -1px;
 }
 
 .tab-header a:hover {

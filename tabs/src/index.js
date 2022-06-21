@@ -31,6 +31,11 @@ import { debounce } from "../src/app/debounce";
       const targetTab = parseInt(href.split("tab")?.[1], 10);
       setTabIndex(targetTab);
       setInkBar(targetTab);
+
+      e.preventDefault();
+      tabPanels.children[targetTab - 1]?.scrollIntoView({
+        behavior: "smooth",
+      });
     }
   });
 
@@ -52,6 +57,7 @@ import { debounce } from "../src/app/debounce";
 
     if (activeTab !== -1) {
       setInkBar(activeTab + 1);
+      tabLinks[activeTab].focus();
     }
   }, 100);
 
