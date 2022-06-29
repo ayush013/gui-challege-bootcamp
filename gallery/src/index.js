@@ -85,8 +85,7 @@ class Main {
           ],
           {
             duration: 300,
-            easing: "ease-in-out",
-            fill: "both",
+            easing: "ease",
           }
         );
       });

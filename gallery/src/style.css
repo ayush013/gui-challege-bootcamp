@@ -53,11 +53,16 @@
   gap: 1rem;
 }
 
+.photo-gallery__image {
+  object-fit: cover;
+  width: 100%;
+  transform-origin: top left;
+  will-change: transform;
+  cursor: pointer;
+}
 
 .photo-gallery .photo-gallery__image {
   aspect-ratio: 1 / 1;
-  object-fit: cover;
-  width: 100%;
   height: 100%;
 }
 
@@ -74,12 +79,9 @@
 
 .photo-gallery__detail .photo-gallery__image {
   aspect-ratio: 16 / 9;
-  object-fit: cover;
-  width: 100%;
-  height: 300px;
+  height: 50vh;
   position: sticky;
   top: 0;
-  transform-origin: top left;
 }
 
 .photo-gallery__detail :not(.photo-gallery__image) {
