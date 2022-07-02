@@ -47,25 +47,23 @@ export default class DateEvent {
   };
 
   setEventHeightandTransform = () => {
-    setTimeout(() => {
-      const start = new Date(this.startTime).getTime();
-      const end = new Date(this.endTime).getTime();
+    const start = new Date(this.startTime).getTime();
+    const end = new Date(this.endTime).getTime();
 
-      const parentContainer = this.layoutRef.closest(".day--events");
+    const parentContainer = this.layoutRef.closest(".day--events");
 
-      const hourUnit = parentContainer.getBoundingClientRect().height / 24;
+    const hourUnit = parentContainer.getBoundingClientRect().height / 24;
 
-      const height = ((end - start) / (1000 * 60 * 60)) * hourUnit;
+    const height = ((end - start) / (1000 * 60 * 60)) * hourUnit;
 
-      this.layoutRef.style.setProperty(
-        "height",
-        `${height > 45 ? height : 45}px`
-      );
+    this.layoutRef.style.setProperty(
+      "height",
+      `${height > 45 ? height : 45}px`
+    );
 
-      this.layoutRef.style.setProperty(
-        "transform",
-        `translateY(${new Date(this.startTime).getHours() * hourUnit}px)`
-      );
-    }, 0);
+    this.layoutRef.style.setProperty(
+      "transform",
+      `translateY(${new Date(this.startTime).getHours() * hourUnit}px)`
+    );
   };
 }

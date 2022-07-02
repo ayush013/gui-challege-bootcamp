@@ -48,13 +48,20 @@ export default class DayCell {
   };
 
   generateAndAppendEvents = (events) => {
-    const eventlist = events.map(
-      ({ startTime, endTime, name }) => new DateEvent(startTime, endTime, name)
-    );
+    return new Promise((resolve) => {
+      const eventlist = events.map(
+        ({ startTime, endTime, name }) =>
+          new DateEvent(startTime, endTime, name)
+      );
 
-    const eventContainer = this.layoutRef.querySelector(".day--events");
+      const eventContainer = this.layoutRef.querySelector(".day--events");
 
-    eventlist.forEach((event) => eventContainer.appendChild(event.getLayout()));
+      eventlist.forEach((event) =>
+        eventContainer.appendChild(event.getLayout())
+      );
+
+      resolve(eventlist);
+    });
   };
 
   checkIfToday = () => {
@@ -74,7 +81,9 @@ export default class DayCell {
     this.layoutRef = clone.querySelector(".day");
 
     this.updateTimeStamp(this.timestamp);
-    this.generateAndAppendEvents(this.events);
+    this.generateAndAppendEvents(this.events).then((events) =>
+      events.forEach((e) => e.setEventHeightandTransform())
+    );
 
     this.checkIfToday();
   };

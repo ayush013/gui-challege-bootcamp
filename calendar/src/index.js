@@ -1,6 +1,4 @@
 import "./style.css";
-import DateEvent from "./app/DateEvent";
-import APIUtil from "./app/ApiUtil";
 import DayCell from "./app/DayCell";
 
 class Calendar {
@@ -52,21 +50,28 @@ class Calendar {
   };
 
   generateRandomEvents = (timestamp) => {
-    const randomStart1 = timestamp - Math.random() * Calendar.dayMilliseconds;
-    const randomStart2 =
-      timestamp - (Math.random() * Calendar.dayMilliseconds) / 10;
-    return [
-      {
-        startTime: randomStart1,
-        endTime: randomStart1 + (Math.random() * Calendar.dayMilliseconds) / 5,
-        name: "Feedback discussion",
-      },
-      {
-        startTime: randomStart2,
-        endTime: randomStart2 + (Math.random() * Calendar.dayMilliseconds) / 6,
-        name: "Standup",
-      },
-    ];
+    const getRandomEvent = (name) => {
+      const startTime =
+        timestamp -
+        (Math.random() * Calendar.dayMilliseconds) / 6 -
+        Calendar.dayMilliseconds / 8;
+      const endTime =
+        timestamp +
+        (Math.random() * Calendar.dayMilliseconds) / 5 -
+        Calendar.dayMilliseconds / 8;
+
+      if (endTime - startTime > 1000 * 60 * 60 * 4) {
+        return getRandomEvent(name);
+      }
+
+      return {
+        startTime,
+        endTime,
+        name,
+      };
+    };
+
+    return [getRandomEvent("Feedback discussion"), getRandomEvent("Standup")];
   };
 
   generateAndAppendLayout = (cellTimestamps) => {
