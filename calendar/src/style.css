@@ -65,6 +65,10 @@
   gap: var(--space);
 }
 
+.calendar .calendar--header .calendar--actions button * {
+  pointer-events: none;
+}
+
 
 .calendar .calendar--header .calendar--actions button {
   height: 2rem;
@@ -90,15 +94,23 @@
 .day {
   margin-top: var(--space);
   border-right: 1px solid rgb(235, 235, 235);
-  padding: calc(var(--space)/2);
+  padding: calc(var(--space)/4);
 }
 
+.day.today .day--title {
+  background-color: rgb(30, 101, 119);
+  color: white;
+}
+
+
 .day .day--title {
+  padding: calc(var(--space)/2);
   font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 2px;
+  font-weight: 600;
+  letter-spacing: 1px;
   text-transform: uppercase;
-  color: rgb(51, 102, 150);
+  color: rgb(51, 130, 150);
+  border-radius: 0.5rem;
 }
 
 .day hr {
@@ -121,6 +133,10 @@
   color: white;
   font-size: 0.7rem;
   cursor: pointer;
+}
+
+.event .event--name {
+  white-space: nowrap;
 }
 
 
