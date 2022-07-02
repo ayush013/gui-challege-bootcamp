@@ -17,7 +17,7 @@
     --bg-dark: rgb(2, 20, 20);
     --bg: var(--bg-light);
 
-    --text-light: black;
+    --text-light: #333333;
     --text-dark: white;
     --text: var(--text-light);
   }
@@ -28,10 +28,9 @@
     font-size: 1rem;
     font-weight: 400;
     min-height: 100vh;
-    color: black;
+    color: var(--text);
     background-color: var(--bg);
-    display: grid;
-    place-items: center;
+    padding: 2rem;
   }
 
   *,
@@ -43,6 +42,89 @@
   }
 }
 
+.calendar {
+  border: 1px solid rgb(165, 165, 165);
+  border-radius: 0.5rem;
+
+  --space: 0.5rem;
+
+  padding: var(--space);
+}
+
+.calendar .calendar--header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: var(--space);
+  align-items: center;
+}
+
+.calendar .calendar--header .calendar--actions {
+  align-items: center;
+  display: flex;
+  gap: var(--space);
+}
+
+
+.calendar .calendar--header .calendar--actions button {
+  height: 2rem;
+  padding: 0 calc(var(--space) * 2);
+  font-weight: 500;
+  font-size: 1rem;
+  background: var(--bg);
+  border: 1px solid rgb(165, 165, 165);
+  border-radius: 0.2rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.calendar .calendar--grid {
+  height: 80vh;
+  border-top: 1px solid rgb(219, 219, 219);
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  overflow-x: auto;
+}
+
+.day {
+  margin-top: var(--space);
+  border-right: 1px solid rgb(235, 235, 235);
+  padding: calc(var(--space)/2);
+}
+
+.day .day--title {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgb(51, 102, 150);
+}
+
+.day hr {
+  margin: var(--space) 0;
+  opacity: 0.3;
+}
+
+.calendar .calendar--grid .day:last-child {
+  border: none;
+}
+
+.day .day--events {
+  height: 100%;
+}
+
+.event {
+  background-color: #32bbaf;
+  padding: var(--space) calc(var(--space) /2);
+  border-radius: 0.5rem;
+  color: white;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+
+/* 
 @media (prefers-color-scheme: dark) {
   body {
     color: white;
@@ -54,4 +136,4 @@
     --text: var(--text-dark);
   }
 
-}
+} */
