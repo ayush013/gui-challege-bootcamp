@@ -124,15 +124,18 @@
 
 .day .day--events {
   height: 100%;
+  position: relative;
 }
 
 .event {
-  background-color: #32bbaf;
+  background-color: rgba(22, 202, 187, 0.534);
   padding: var(--space) calc(var(--space) /2);
   border-radius: 0.5rem;
   color: white;
   font-size: 0.7rem;
   cursor: pointer;
+  position: absolute;
+  width: 100%;
 }
 
 .event .event--name {

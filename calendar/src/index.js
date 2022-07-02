@@ -51,16 +51,27 @@ class Calendar {
     return cellTimestamps;
   };
 
-  generateAndAppendLayout = (cellTimestamps) => {
-    const events = [
+  generateRandomEvents = (timestamp) => {
+    const randomStart1 = timestamp - Math.random() * Calendar.dayMilliseconds;
+    const randomStart2 =
+      timestamp - (Math.random() * Calendar.dayMilliseconds) / 10;
+    return [
       {
-        startTime: 1656756015445,
-        endTime: 1656765859792,
+        startTime: randomStart1,
+        endTime: randomStart1 + (Math.random() * Calendar.dayMilliseconds) / 5,
         name: "Feedback discussion",
       },
+      {
+        startTime: randomStart2,
+        endTime: randomStart2 + (Math.random() * Calendar.dayMilliseconds) / 6,
+        name: "Standup",
+      },
     ];
+  };
 
+  generateAndAppendLayout = (cellTimestamps) => {
     this.cells = cellTimestamps.map((ts) => {
+      const events = this.generateRandomEvents(ts);
       const day = new DayCell(ts, events);
       document.querySelector(".calendar--grid").appendChild(day.getLayout());
 
@@ -82,7 +93,11 @@ class Calendar {
           }
 
           const timestamps = this.generateTimeStamps(this.offset);
-          this.cells.forEach((cell, i) => cell.setTimestamp(timestamps[i]));
+          const events = timestamps.map((ts) => this.generateRandomEvents(ts));
+
+          this.cells.forEach((cell, i) =>
+            cell.setTimestamp(timestamps[i], cell.setEvents(events[i]))
+          );
         }
       });
   };

@@ -34,7 +34,7 @@ export default class DayCell {
     this.events = events;
 
     this.deleteEvents();
-    this.generateAndAppendEvents();
+    this.generateAndAppendEvents(events);
   }
 
   deleteEvents = () => {

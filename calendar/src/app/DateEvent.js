@@ -38,12 +38,15 @@ export default class DateEvent {
       ).textContent = `${startString}  -  ${endString}`;
     }
 
-    this.layoutRef.addEventListener("DOMNodeInserted", this.setEventHeight);
+    this.layoutRef.addEventListener(
+      "DOMNodeInserted",
+      this.setEventHeightandTransform
+    );
 
     return this.layoutRef;
   };
 
-  setEventHeight = () => {
+  setEventHeightandTransform = () => {
     setTimeout(() => {
       const start = new Date(this.startTime).getTime();
       const end = new Date(this.endTime).getTime();
@@ -54,7 +57,15 @@ export default class DateEvent {
 
       const height = ((end - start) / (1000 * 60 * 60)) * hourUnit;
 
-      this.layoutRef.style.setProperty("height", `${height}px`);
+      this.layoutRef.style.setProperty(
+        "height",
+        `${height > 45 ? height : 45}px`
+      );
+
+      this.layoutRef.style.setProperty(
+        "transform",
+        `translateY(${new Date(this.startTime).getHours() * hourUnit}px)`
+      );
     }, 0);
   };
 }
