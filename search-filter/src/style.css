@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Basic reset */
+
+html {
+  font-size: 16px;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+.search {
+  width: 100%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-radius: 0.25rem;
+}
+
+.result-grid {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.search-result-card {
+  padding: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+}
+
+.search-result-card .header {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+
+.search-result-card .header img {
+  aspect-ratio: 1 / 1;
+  height: 4rem;
+  border-radius: 50%;
+}
+
+
+.search-result-card .header h2 {
+  font-weight: 600;
+  font-size: 1.5rem;
+}
