@@ -1,7 +1,27 @@
+import SearchBar from "./app/SearchBar";
+import store, { ACTION_TYPES } from "./app/store";
 import "./style.css";
 
 class Main {
-  constructor() {}
+  constructor() {
+    const searchbar = new SearchBar();
+    searchbar.onChange((searchTerm) => {
+      console.log(store.getStore());
+
+      store.dispatch({
+        type: ACTION_TYPES.SET_DATA,
+        payload: ["yo"],
+      });
+    });
+
+    store.subscribe(({ data }) => {
+      console.log("callback from subscription", data);
+    });
+
+    store.subscribe(({ pagination }) => {
+      console.log("callback from subscription 2", pagination);
+    });
+  }
 }
 
 new Main();
@@ -12,19 +32,6 @@ new Main();
 // tile component with props
 // main class with driver logic
 // intersection observer class with onchange callback
-
-// API UTIL (DUMB)
-// static API fetch method
-
-// STORE (PROVIDER)
-// data from API
-// loading and error states
-// pagination -> page number
-// method to subscribe to store updates
-
-// SEARCH (PROVIDER)
-// binds to template of search bar
-// emits on change event with debounce
 
 // TILE COMPONENT (CONSUMER)
 // props -> title, desc, user avatar

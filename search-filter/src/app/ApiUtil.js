@@ -13,3 +13,6 @@ export default class ApiUtil {
     return data;
   }
 }
+
+// API UTIL (DUMB)
+// static API fetch method
