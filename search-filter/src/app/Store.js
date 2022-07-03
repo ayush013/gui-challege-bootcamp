@@ -4,7 +4,7 @@
 // pagination -> page number
 // method to subscribe to store updates
 
-class Store {
+export default class Store {
   _state = {
     data: {
       items: [],
@@ -14,7 +14,7 @@ class Store {
     pagination: {
       pageNumber: 0,
       pageSize: 0,
-      totalCount: 0,
+      totalCount: Infinity,
     },
   };
 
@@ -35,16 +35,30 @@ class Store {
           ...this._state,
           data: {
             ...this._state.data,
+            items: payload,
+          },
+        };
+      }
+      case ACTION_TYPES.APPEND_DATA: {
+        return {
+          ...this._state,
+          data: {
+            ...this._state.data,
             items: this._state.data.items.concat(...payload),
           },
         };
       }
       case ACTION_TYPES.CLEAR_DATA: {
         return {
-          ...this._state,
           data: {
-            ...this._state.data,
             items: [],
+            loading: false,
+            error: false,
+          },
+          pagination: {
+            pageNumber: 0,
+            pageSize: 0,
+            totalCount: Infinity,
           },
         };
       }
@@ -86,6 +100,8 @@ class Store {
   dispatch = (action) => {
     this._state = this.reducer(action);
 
+    console.log(this._state);
+
     this._notify();
   };
 
@@ -96,10 +112,9 @@ class Store {
 
 export const ACTION_TYPES = {
   SET_DATA: "SET_DATA",
+  APPEND_DATA: "APPEND_DATA",
   CLEAR_DATA: "CLEAR_DATA",
   SET_LOADING: "SET_LOADING",
   SET_ERROR: "SET_ERROR",
   SET_PAGINATION: "SET_PAGINATION",
 };
-
-export default new Store();
