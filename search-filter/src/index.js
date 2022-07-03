@@ -3,10 +3,17 @@ import SearchBar from "./app/SearchBar";
 import TileComponent from "./app/Tile";
 import Store, { ACTION_TYPES } from "./app/store";
 import "./style.css";
+import ViewportObserver from "./app/ViewportObserver";
 
 // MAIN
 // initialize search component
 // hook to search changes
+
+// fetchSearchResultsAndNotifyStore
+// get pagination data from store
+// make API call
+// update store state loading
+// update store data on fetch
 
 // subscription to store data
 // callback with render template logic
@@ -37,7 +44,7 @@ class Main {
   }
 
   initializeLoadMoreButton = () => {
-    this.loadMoreButton.addEventListener("click", () => {
+    const loadMoreClickedListener = () => {
       const {
         pagination: { pageNumber },
       } = store.getStore();
@@ -50,7 +57,10 @@ class Main {
       });
 
       this.fetchSearchResultsAndNotifyStore();
-    });
+    };
+
+    ViewportObserver.observe(this.loadMoreButton, loadMoreClickedListener);
+    this.loadMoreButton.addEventListener("click", loadMoreClickedListener);
   };
 
   renderSearchResults = (items) => {
@@ -77,11 +87,6 @@ class Main {
     }
   };
 
-  // fetchSearchResultsAndNotifyStore
-  // get pagination data from store
-  // make API call
-  // update store state loading
-  // update store data on fetch
   fetchSearchResultsAndNotifyStore = () => {
     const {
       pagination: { pageNumber },
@@ -144,7 +149,3 @@ new Main();
 // tile component with props
 // main class with driver logic
 // intersection observer class with onchange callback
-
-// INTERSECTION OBSERVER (PROVIDER)
-// props -> element to observe
-// onViewabilityChanged callback
