@@ -8,7 +8,7 @@ export default class Store {
   _state = {
     data: {
       items: [],
-      loading: false,
+      loading: true,
       error: false,
     },
     pagination: {
@@ -99,8 +99,6 @@ export default class Store {
 
   dispatch = (action) => {
     this._state = this.reducer(action);
-
-    console.log(this._state);
 
     this._notify();
   };

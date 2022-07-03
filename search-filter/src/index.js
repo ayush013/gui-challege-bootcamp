@@ -19,20 +19,39 @@ const store = new Store();
 
 class Main {
   constructor() {
-    this.initializeSearchBar();
-
     this.resultGrid = document.querySelector(".result-grid");
+    this.loadMoreButton = document.querySelector(".load-more");
+
+    this.searchTerm = "";
+
+    this.initializeSearchBar();
+    this.initializeLoadMoreButton();
 
     store.subscribe(({ data: { items } }) => {
-      console.log("callback from subscription", items);
-
       this.renderSearchResults(items);
     });
 
-    // store.subscribe(({ pagination }) => {
-    //   console.log("callback from subscription 2", pagination);
-    // });
+    store.subscribe(({ data: { loading } }) => {
+      this.toggleLoadMoreButton(loading);
+    });
   }
+
+  initializeLoadMoreButton = () => {
+    this.loadMoreButton.addEventListener("click", () => {
+      const {
+        pagination: { pageNumber },
+      } = store.getStore();
+
+      store.dispatch({
+        type: ACTION_TYPES.SET_PAGINATION,
+        payload: {
+          pageNumber: pageNumber + 1,
+        },
+      });
+
+      this.fetchSearchResultsAndNotifyStore();
+    });
+  };
 
   renderSearchResults = (items) => {
     while (this.resultGrid.children.length) {
@@ -50,19 +69,27 @@ class Main {
     this.resultGrid.appendChild(fragment);
   };
 
+  toggleLoadMoreButton = (loading) => {
+    if (loading) {
+      this.loadMoreButton.classList.add("hidden");
+    } else {
+      this.loadMoreButton.classList.remove("hidden");
+    }
+  };
+
   // fetchSearchResultsAndNotifyStore
   // get pagination data from store
   // make API call
   // update store state loading
   // update store data on fetch
-  fetchSearchResultsAndNotifyStore = (searchTerm) => {
+  fetchSearchResultsAndNotifyStore = () => {
     const {
       pagination: { pageNumber },
     } = store.getStore();
 
     store.dispatch({ type: ACTION_TYPES.SET_LOADING, payload: true });
 
-    ApiUtil.getSearchResults(searchTerm, pageNumber).then((results) => {
+    ApiUtil.getSearchResults(this.searchTerm, pageNumber).then((results) => {
       const { data, pagination } = results;
 
       const storeData = data.map((el) => ({
@@ -72,11 +99,15 @@ class Main {
       }));
 
       store.dispatch({ type: ACTION_TYPES.SET_LOADING, payload: false });
-      store.dispatch({ type: ACTION_TYPES.SET_DATA, payload: storeData });
+      store.dispatch({
+        type:
+          pageNumber !== 0 ? ACTION_TYPES.APPEND_DATA : ACTION_TYPES.SET_DATA,
+        payload: storeData,
+      });
       store.dispatch({
         type: ACTION_TYPES.SET_PAGINATION,
         payload: {
-          pageNumber: pagination.offset + 1,
+          pageNumber: pagination.offset,
           totalCount: pagination.total_count,
           pageSize: pagination.count,
         },
@@ -87,8 +118,17 @@ class Main {
   initializeSearchBar() {
     const searchbar = new SearchBar();
     searchbar.onChange((searchTerm) => {
+      this.searchTerm = searchTerm;
+
+      store.dispatch({
+        type: ACTION_TYPES.SET_PAGINATION,
+        payload: {
+          pageNumber: 0,
+        },
+      });
+
       if (searchTerm) {
-        this.fetchSearchResultsAndNotifyStore(searchTerm);
+        this.fetchSearchResultsAndNotifyStore();
       } else {
         store.dispatch({ type: ACTION_TYPES.CLEAR_DATA });
       }
