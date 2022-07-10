@@ -2,8 +2,9 @@ export default class Dialog {
   constructor() {
     this.dialogTemplate = document.getElementById("dialog");
     this.backdropRef = null;
+    this.isOpen = false;
 
-    this.create();
+    this.open();
   }
 
   generateBackdrop() {
@@ -22,7 +23,7 @@ export default class Dialog {
     return backdropElement;
   }
 
-  create() {
+  open() {
     const dialog = this.dialogTemplate.content.cloneNode(true);
 
     const backdrop = this.generateBackdrop();
@@ -32,6 +33,7 @@ export default class Dialog {
     this.attachDismissListener();
 
     document.body.appendChild(backdrop);
+    this.isOpen = true;
 
     this.addFocusToCancelButton();
   }
@@ -46,17 +48,8 @@ export default class Dialog {
       requestAnimationFrame(() => {
         dialog.classList.add("reverse");
         dialog.classList.add("fade-in");
+        this.close();
       });
-
-      const { matches: motionOK } = window.matchMedia(
-        "(prefers-reduced-motion: no-preference)"
-      );
-
-      if (motionOK) {
-        dialog.addEventListener("animationend", this.dismissDialog.bind(this));
-      } else {
-        this.dismissDialog();
-      }
     };
 
     this.backdropRef.addEventListener("click", (e) => {
@@ -69,7 +62,19 @@ export default class Dialog {
     cancelBtn.focus();
   }
 
-  dismissDialog() {
-    this.backdropRef.remove();
+  close() {
+    const { matches: motionOK } = window.matchMedia(
+      "(prefers-reduced-motion: no-preference)"
+    );
+    const dialog = this.backdropRef.querySelector(".dialog");
+    this.isOpen = false;
+
+    if (motionOK) {
+      Promise.allSettled(dialog.getAnimations().map((a) => a.finished)).then(
+        () => this.backdropRef.remove()
+      );
+    } else {
+      this.backdropRef.remove();
+    }
   }
 }

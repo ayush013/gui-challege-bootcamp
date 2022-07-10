@@ -6,5 +6,6 @@ import "./style.css";
 
   button2.addEventListener("click", (e) => {
     const dialog = new Dialog();
+    console.log(dialog);
   });
 })();
