@@ -4,5 +4,5 @@ import "./style.css";
 (() => {
   const button = document.querySelector(".toast-btn");
 
-  button.addEventListener("click", () => new Toast());
+  button.addEventListener("click", () => console.log(new Toast()));
 })();

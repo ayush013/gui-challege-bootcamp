@@ -129,7 +129,7 @@ body {
 
   --padding: 1rem;
 
-  --animation-ok: fadeIn 0.5s ease, fadeOut 0.25s ease 3s forwards;
+  --animation-ok: fadeIn 0.5s ease;
   --animation-reduced: ;
   --animation: var(--animation-reduced);
 
@@ -148,12 +148,6 @@ body {
   }
 }
 
-@keyframes fadeOut {
-  to {
-    opacity: 0;
-    transform: translateY(-50px);
-  }
-}
 
 @media (prefers-reduced-motion: no-preference) {
   .toast {

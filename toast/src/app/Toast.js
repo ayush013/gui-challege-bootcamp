@@ -2,21 +2,43 @@ class Toast {
   constructor() {
     this.template = document.getElementById("toast");
     this.parentContainer = document.querySelector(".toast-container");
+    this.timeout = 5000;
 
     this.create();
   }
 
   create() {
     const toastNode = this.template.content.cloneNode(true);
-    const toast = toastNode.querySelector(".toast");
-    toast.textContent = this.getRandomText();
+    this.toast = toastNode.querySelector(".toast");
+    this.toast.textContent = this.getRandomText();
 
     this.parentContainer.appendChild(toastNode);
 
-    this.listenToastAnimationEnd(toast).then((e) => {
-      toast.remove();
-    });
+    setTimeout(this.dismissToast, this.timeout);
   }
+
+  animateFadeOutToast = () => {
+    return new Promise((resolve) => {
+      this.toast.animate(
+        [
+          {
+            opacity: 0,
+            transform: "translateY(-50px)",
+          },
+        ],
+        { duration: 300, easing: "ease", fill: "forwards" }
+      );
+      setTimeout(resolve, 300);
+    });
+  };
+
+  dismissToast = () => {
+    this.animateFadeOutToast().then(() => {
+      this.listenToastAnimationEnd(toast).then(() => {
+        this.toast.remove();
+      });
+    });
+  };
 
   getRandomText() {
     const randomString =
