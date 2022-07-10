@@ -1,79 +1,113 @@
 import "./style.css";
 
-(() => {
-  const switchInput = document.querySelector(".switch input[type=checkbox]");
-  const switchGroup = document.querySelector(".switch");
-  const toggle = document.querySelector(".toggle");
-
-  const drag = {
-    trackWidth:
-      switchInput.getBoundingClientRect().width -
-      2 *
-        Number(
-          window
-            .getComputedStyle(switchGroup)
-            .getPropertyValue("padding")
-            .split("px")?.[0]
-        ),
-    toggleWidth: toggle.getBoundingClientRect().width,
-    startX: 0,
-    currentX: 0,
-  };
-
-  switchInput.addEventListener("change", () => {
-    switchGroup.setAttribute("aria-checked", switchInput.checked);
-    switchGroup.classList.toggle("active");
-  });
-
-  switchGroup.addEventListener("keyup", ({ code }) => {
-    if (code === "Space" || code === "Enter") {
-      switchInput.click();
+class Switch {
+  constructor(switchEl) {
+    if (!switchEl && !(switchEl instanceof HTMLElement)) {
+      throw new Error("Invalid selector");
     }
-  });
 
-  const dragstart = (e) => {
-    const isTouchEvent = e instanceof TouchEvent;
+    this.switchGroupEl = switchEl;
+    this.isActive = false;
 
-    drag.startX = isTouchEvent ? e.targetTouches[0].clientX : e.offsetX;
-    toggle.classList.remove("click-toggle");
+    this.initialize();
+  }
+
+  initialize = () => {
+    this.switchInput = this.switchGroupEl.querySelector(
+      ".switch input[type=checkbox]"
+    );
+    this.switchGroup = this.switchGroupEl.querySelector(".switch");
+    this.toggle = this.switchGroupEl.querySelector(".toggle");
+
+    this.calculateDragState();
+
+    this.addToggleListener();
+    this.addTouchListeners();
+    this.addKeyboardListener();
+    this.addDragListeners();
   };
 
-  const dragmove = (e) => {
+  calculateDragState = () => {
+    const toggleWidth = this.toggle.getBoundingClientRect().width;
+
+    this._dragState = {
+      trackWidth:
+        this.switchInput.getBoundingClientRect().width -
+        toggleWidth -
+        2 *
+          Number(
+            window
+              .getComputedStyle(this.switchGroup)
+              .getPropertyValue("padding")
+              .split("px")?.[0]
+          ),
+      startX: 0,
+    };
+  };
+
+  addDragListeners = () => {
+    this.switchInput.addEventListener("dragstart", this._dragstart);
+    this.switchInput.addEventListener("dragover", this._dragmove);
+    this.switchInput.addEventListener("dragend", this._dragend);
+  };
+
+  addTouchListeners = () => {
+    this.switchInput.addEventListener("touchstart", this._dragstart);
+    this.switchInput.addEventListener("touchmove", this._dragmove);
+    this.switchInput.addEventListener("touchend", this._dragend);
+  };
+
+  addKeyboardListener = () => {
+    this.switchGroup.addEventListener("keyup", ({ code }) => {
+      if (code === "Space" || code === "Enter") {
+        this.switchInput.click();
+      }
+    });
+  };
+
+  addToggleListener = () => {
+    this.switchInput.addEventListener("change", () => {
+      const newState = this.switchInput.checked;
+      this.isActive = newState;
+      this.onToggle(newState);
+      this.switchGroup.setAttribute("aria-checked", newState);
+      this.switchGroup.classList.toggle("active");
+    });
+  };
+
+  _dragstart = (e) => {
     const isTouchEvent = e instanceof TouchEvent;
+    this._dragState.startX = isTouchEvent
+      ? e.changedTouches[0].clientX
+      : e.offsetX;
+    this.toggle.classList.remove("toggle-transition");
+  };
 
-    const offset = isTouchEvent ? e.targetTouches[0].clientX : e.offsetX;
-    const distance = offset - drag.startX;
-
+  _dragmove = (e) => {
+    const isTouchEvent = e instanceof TouchEvent;
+    const offset = isTouchEvent ? e.changedTouches[0].clientX : e.offsetX;
+    const distance = offset - this._dragState.startX;
     const isForwardToggle = distance > 0;
-
     const translateX = isForwardToggle
       ? distance
-      : drag.trackWidth - drag.toggleWidth - Math.abs(distance);
-
-    if (Math.abs(distance) <= drag.trackWidth - drag.toggleWidth) {
-      toggle.style.setProperty("transform", `translateX(${translateX}px)`);
+      : this._dragState.trackWidth - Math.abs(distance);
+    if (Math.abs(distance) <= this._dragState.trackWidth) {
+      this.toggle.style.setProperty("transform", `translateX(${translateX}px)`);
     }
   };
 
-  const dragend = (e) => {
+  _dragend = (e) => {
     const isTouchEvent = e instanceof TouchEvent;
-
     const offset = isTouchEvent ? e.changedTouches[0]?.clientX : e.offsetX;
-    const distance = offset - drag.startX;
-
-    toggle.style.removeProperty("transform");
-    toggle.classList.add("click-toggle");
-
-    if (Math.abs(distance) >= (drag.trackWidth - drag.toggleWidth) / 2) {
-      switchInput.click();
+    const distance = offset - this._dragState.startX;
+    this.toggle.style.removeProperty("transform");
+    this.toggle.classList.add("toggle-transition");
+    if (Math.abs(distance) >= this._dragState.trackWidth / 2) {
+      this.switchInput.click();
     }
   };
 
-  switchInput.addEventListener("dragstart", dragstart);
-  switchInput.addEventListener("dragover", dragmove);
-  switchInput.addEventListener("dragend", dragend);
+  onToggle = (val) => {};
+}
 
-  switchInput.addEventListener("touchstart", dragstart);
-  switchInput.addEventListener("touchmove", dragmove);
-  switchInput.addEventListener("touchend", dragend);
-})();
+console.log(new Switch(document.querySelector(".switch-group")));

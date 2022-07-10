@@ -135,7 +135,7 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .click-toggle {
+  .toggle-transition {
     transition: transform var(--transition-duration) ease;
   }
 }
