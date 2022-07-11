@@ -1,55 +1,63 @@
 import "./style.css";
 
-(() => {
-  const API = "https://picsum.photos/v2/list";
+const API = "https://picsum.photos/v2/list";
+const DIRECTION = {
+  LEFT: "LEFT",
+  RIGHT: "RIGHT",
+};
 
-  const stories = document.querySelector(".stories");
-  const storyTemplate = document.getElementById("story");
+class Stories {
+  constructor() {
+    this.data = [];
+    this.storiesContainer = document.querySelector(".stories");
 
-  fetch(API)
-    .then((r) => r.json())
-    .then((res) => {
-      const listSubArrays = res.reduce((acc, el, i) => {
-        i % 3 === 0 ? acc.push([el]) : acc[acc.length - 1].push(el);
-        return acc;
-      }, []);
-      stories.style.setProperty("--users", listSubArrays.length);
+    this.computeStoryDimensions();
+    this.initialize();
+  }
+
+  fetchData = () => {
+    return fetch(API)
+      .then((r) => r.json())
+      .then((res) => {
+        this.data = res.reduce((acc, el, i) => {
+          i % 3 === 0 ? acc.push([el]) : acc[acc.length - 1].push(el);
+          return acc;
+        }, []);
+
+        return this.data;
+      });
+  };
+
+  computeStoryDimensions = () => {
+    this.dimensions = {
+      storiesWidth: this.storiesContainer.getBoundingClientRect().width,
+    };
+  };
+
+  initialize = () => {
+    this.fetchData().then((data) => {
       const fragment = new DocumentFragment();
-      listSubArrays.forEach((list) => {
-        const mediaTemplates = list.map(mapMediaToTemplate);
-        const userDiv = document.createElement("div");
-        userDiv.classList.add("user");
-        mediaTemplates.forEach((template) => userDiv.appendChild(template));
-        fragment.appendChild(userDiv);
+      data.forEach((list) => {
+        const userStory = new UserStory(list);
+        fragment.appendChild(userStory.getLayout());
       });
 
-      stories.appendChild(fragment);
+      this.storiesContainer.appendChild(fragment);
     });
 
-  const mapMediaToTemplate = ({ download_url: url, author }) => {
-    const template = storyTemplate.content.cloneNode(true);
-    const img = template.querySelector("img");
-    img.setAttribute("src", url);
-    img.setAttribute("alt", `An image by ${author}`);
-    return template;
+    this.addStoryClickListener();
   };
 
-  const dimensions = {
-    storiesWidth: stories.getBoundingClientRect().width,
-    storiesX: stories.getBoundingClientRect().x,
+  addStoryClickListener = () => {
+    this.storiesContainer.addEventListener("click", this.switchStories);
   };
 
-  const DIRECTION = {
-    LEFT: "LEFT",
-    RIGHT: "RIGHT",
-  };
-
-  const switchStories = (e) => {
-    const { clientX, target } = e;
-    const { storiesWidth, storiesX } = dimensions;
+  switchStories = (e) => {
+    const { offsetX, target } = e;
+    const { storiesWidth } = this.dimensions;
 
     const direction =
-      clientX - storiesX > storiesWidth / 2 ? DIRECTION.RIGHT : DIRECTION.LEFT;
+      offsetX > storiesWidth / 2 ? DIRECTION.RIGHT : DIRECTION.LEFT;
 
     const motionOK = window.matchMedia(
       "(prefers-reduced-motion: no-preference)"
@@ -83,6 +91,34 @@ import "./style.css";
       }
     }
   };
+}
 
-  stories.addEventListener("click", switchStories);
-})();
+class UserStory {
+  constructor(list) {
+    this.storyTemplate = document.getElementById("story");
+    this.data = list;
+
+    this.layout = this.initialize(list);
+  }
+
+  initialize = () => {
+    const mediaTemplates = this.data.map(this.mapMediaToTemplate);
+    const userDiv = document.createElement("div");
+    userDiv.classList.add("user");
+    mediaTemplates.forEach((template) => userDiv.prepend(template));
+
+    return userDiv;
+  };
+
+  getLayout = () => this.layout;
+
+  mapMediaToTemplate = ({ download_url: url, author }) => {
+    const template = this.storyTemplate.content.cloneNode(true);
+    const img = template.querySelector("img");
+    img.setAttribute("src", url);
+    img.setAttribute("alt", `An image by ${author}`);
+    return template;
+  };
+}
+
+new Stories();
