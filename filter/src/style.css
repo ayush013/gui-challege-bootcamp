@@ -49,3 +49,54 @@
   }
 
 }
+
+.filter-container button {
+  --size: 0.8rem;
+  padding: var(--size);
+  background-color: rgb(45, 49, 48);
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: calc(var(--size) / 2);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+
+.filter-container button:hover {
+  background-color: rgb(32, 34, 33);
+}
+
+
+.filter-container button.selected {
+  background-color: rgb(255, 255, 255);
+  color: black;
+}
+
+.filter-container button.selected:hover {
+  background-color: rgb(223, 223, 223);
+}
+
+.filter-container {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 1rem;
+}
+
+.results-grid {
+
+  --columns: 3;
+
+  display: grid;
+  grid-template-columns: repeat(var(--columns), calc(100vmin / var(--columns)));
+  grid-auto-rows: calc(100vmin / var(--columns));
+  gap: 1.5rem;
+
+  margin-top: 2rem;
+}
+
+.results-grid img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
