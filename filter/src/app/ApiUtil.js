@@ -10,8 +10,9 @@ export default class ApiUtil {
     fetch(API)
       .then((r) => r.json())
       .then((list) => {
-        return list.map(({ download_url, author }) => ({
-          download_url,
+        return list.map(({ id, author }) => ({
+          download_url: `https://picsum.photos/id/${id}/500/500`,
+          id,
           author,
           category: MOCK_CATEGORIES[getRandomCategory()],
         }));

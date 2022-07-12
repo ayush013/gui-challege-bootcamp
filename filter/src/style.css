@@ -26,6 +26,8 @@
     color: black;
     background-color: var(--bg);
     padding: 2rem;
+    display: flex;
+    justify-content: center;
   }
 
   *,
@@ -84,7 +86,6 @@
 }
 
 .results-grid {
-
   --columns: 3;
 
   display: grid;

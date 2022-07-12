@@ -11,13 +11,13 @@ class Main {
   }
 
   initializeApp = async () => {
-    this.imageTemplate = document.getElementById("image");
     this.resultContainer = document.querySelector(".results-grid");
     this.store = [];
     this.activeFilter = "all";
+    this.previousRenderedNodes = [];
 
     const data = await ApiUtil.getData();
-    this.store = data;
+    this.store = data.map((img) => new ImageNode(img));
 
     this.renderResults(this.activeFilter);
     this.renderFilters();
@@ -52,26 +52,20 @@ class Main {
           node.classList.remove("selected")
         );
         e.target.classList.add("selected");
-        console.log(this.activeFilter);
       }
     });
   };
 
-  renderResults = (filter) => {
-    const filteredData =
-      filter === "all" || !filter
-        ? this.store
-        : this.store.filter(({ category }) => category === filter);
+  getFilteredResults = (filter) =>
+    filter === "all" || !filter
+      ? this.store
+      : this.store.filter((image) => image.getData().category === filter);
 
-    console.log(filteredData, filter, this.store);
+  renderResults = (filter) => {
+    const filteredData = this.getFilteredResults(filter);
 
     const fragmentNode = filteredData.reduce((fragment, image) => {
-      const { download_url, author } = image;
-
-      const imageClone = this.imageTemplate.content.cloneNode(true);
-      const imageNode = imageClone.querySelector("img");
-      imageNode.src = download_url;
-      imageNode.alt = `An image by ${author}`;
+      const imageClone = image.getLayout();
 
       fragment.appendChild(imageClone);
 
@@ -83,7 +77,95 @@ class Main {
     }
 
     this.resultContainer.appendChild(fragmentNode);
+
+    filteredData.forEach((image) => {
+      if (this.previousRenderedNodes.find((id) => id === image.id)) {
+        image.initFlipAnimation();
+      } else {
+        image.getDefaultAnimation();
+      }
+    });
+
+    this.previousRenderedNodes = filteredData.map((image) => image.id);
   };
 }
 
-new Main(``);
+class ImageNode {
+  constructor(image) {
+    this.imageTemplate = document.getElementById("image");
+    this.data = image;
+    this.id = image.id;
+  }
+
+  getLayout = () => {
+    const { download_url, author } = this.data;
+    this.imageClone = this.imageTemplate.content.cloneNode(true);
+    this.imageNode = this.imageClone.querySelector("img");
+    this.imageNode.src = download_url;
+    this.imageNode.alt = `An image by ${author}`;
+    return this.imageClone;
+  };
+
+  calculateLayoutBounds = () => {
+    const bounds = this.imageNode.getBoundingClientRect();
+    this.layoutBounds = {
+      x: bounds.x,
+      y: bounds.y,
+    };
+  };
+
+  getLayoutBounds = () => this.layoutBounds;
+
+  getData = () => this.data;
+
+  getDefaultAnimation = () => {
+    this.imageNode.animate(
+      [
+        {
+          transform: "scale(0)",
+          opacity: 0,
+        },
+        {
+          transform: "scale(1)",
+          opacity: 1,
+        },
+      ],
+      {
+        duration: 300,
+        easing: "ease",
+      }
+    );
+  };
+
+  initFlipAnimation = () => {
+    const oldBounds = this.getLayoutBounds();
+    this.calculateLayoutBounds();
+    const newBounds = this.getLayoutBounds();
+
+    if (
+      oldBounds &&
+      (oldBounds.x !== newBounds.x || oldBounds.y !== newBounds.y)
+    ) {
+      this.imageNode.animate(
+        [
+          {
+            transform: `translate(${oldBounds.x - newBounds.x}px,${
+              oldBounds.y - newBounds.y
+            }px)`,
+          },
+          {
+            transform: "translate(0,0)",
+          },
+        ],
+        {
+          duration: 300,
+          easing: "ease",
+        }
+      );
+    } else {
+      this.getDefaultAnimation();
+    }
+  };
+}
+
+new Main();
