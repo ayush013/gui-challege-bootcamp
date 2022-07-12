@@ -78,16 +78,20 @@ class Main {
 
     this.resultContainer.appendChild(fragmentNode);
 
-    filteredData.forEach((image) => {
+    this.animateNodes(filteredData);
+
+    this.previousRenderedNodes = filteredData.map((image) => image.id);
+  };
+
+  animateNodes(data) {
+    data.forEach((image) => {
       if (this.previousRenderedNodes.find((id) => id === image.id)) {
         image.initFlipAnimation();
       } else {
         image.getDefaultAnimation();
       }
     });
-
-    this.previousRenderedNodes = filteredData.map((image) => image.id);
-  };
+  }
 }
 
 class ImageNode {
@@ -119,22 +123,24 @@ class ImageNode {
   getData = () => this.data;
 
   getDefaultAnimation = () => {
-    this.imageNode.animate(
-      [
+    requestAnimationFrame(() => {
+      this.imageNode.animate(
+        [
+          {
+            transform: "scale(0)",
+            opacity: 0,
+          },
+          {
+            transform: "scale(1)",
+            opacity: 1,
+          },
+        ],
         {
-          transform: "scale(0)",
-          opacity: 0,
-        },
-        {
-          transform: "scale(1)",
-          opacity: 1,
-        },
-      ],
-      {
-        duration: 300,
-        easing: "ease",
-      }
-    );
+          duration: 300,
+          easing: "ease",
+        }
+      );
+    });
   };
 
   initFlipAnimation = () => {
@@ -146,22 +152,24 @@ class ImageNode {
       oldBounds &&
       (oldBounds.x !== newBounds.x || oldBounds.y !== newBounds.y)
     ) {
-      this.imageNode.animate(
-        [
+      requestAnimationFrame(() => {
+        this.imageNode.animate(
+          [
+            {
+              transform: `translate(${oldBounds.x - newBounds.x}px,${
+                oldBounds.y - newBounds.y
+              }px)`,
+            },
+            {
+              transform: "translate(0,0)",
+            },
+          ],
           {
-            transform: `translate(${oldBounds.x - newBounds.x}px,${
-              oldBounds.y - newBounds.y
-            }px)`,
-          },
-          {
-            transform: "translate(0,0)",
-          },
-        ],
-        {
-          duration: 300,
-          easing: "ease",
-        }
-      );
+            duration: 300,
+            easing: "ease",
+          }
+        );
+      });
     } else {
       this.getDefaultAnimation();
     }
