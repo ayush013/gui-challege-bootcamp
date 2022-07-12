@@ -75,13 +75,11 @@
   backdrop-filter: blur(10px);
   background-color: rgba(0, 0, 0, 0.6);
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .photo-gallery__detail .photo-gallery__image {
   aspect-ratio: 2 / 1;
-  /* height: 50vh; */
-  position: sticky;
-  top: 0;
 }
 
 .photo-gallery__detail :not(.photo-gallery__image) {
