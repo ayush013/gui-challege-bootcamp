@@ -6,6 +6,7 @@ import "./style.css";
   splitButtonGroup.addEventListener("click", (event) => {
     if (event.target.nodeName !== "BUTTON") return;
     console.log(event.target.innerText);
+    event.target.blur();
   });
 
   document.addEventListener("keyup", (e) => {

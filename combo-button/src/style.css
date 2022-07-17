@@ -133,7 +133,7 @@ body {
   background: var(--bg);
 
   box-shadow: 0 0.2rem 1rem rgba(7, 9, 29, 0.2);
-  bottom: 2.5rem;
+  top: 3rem;
   opacity: 0;
   pointer-events: none;
   border-radius: 0.4rem;
@@ -160,9 +160,11 @@ body {
   cursor: pointer;
   text-align: left;
   transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.2rem;
+
+  display: grid;
+  grid-template-columns: 1rem 1fr 1rem;
+
+  gap: 0.4rem;
   border: none;
   font-weight: 600;
   user-select: none;

@@ -67,13 +67,33 @@ export default class DayCell {
   checkIfToday = () => {
     if (new Date(this.timestamp).toDateString() === new Date().toDateString()) {
       this.layoutRef.classList.add("today");
+      this.addDayLine();
     } else {
       this.layoutRef.classList.remove("today");
+      this.removeDayLine();
     }
   };
 
   getLayout = () => {
     return this.layoutRef;
+  };
+
+  removeDayLine = () => {
+    const dayLine = this.layoutRef.querySelector(".current--line");
+    dayLine.classList.add("hidden");
+  };
+
+  addDayLine = () => {
+    const dayLine = this.layoutRef.querySelector(".current--line");
+    dayLine.classList.remove("hidden");
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    const percentDayElapsed =
+      (new Date(this.timestamp) - d) / (1000 * 60 * 60 * 24);
+    const yOffset =
+      percentDayElapsed *
+      document.querySelector(".calendar--grid").getBoundingClientRect().height;
+    dayLine.style.transform = `translateY(${yOffset}px)`;
   };
 
   initLayout = () => {

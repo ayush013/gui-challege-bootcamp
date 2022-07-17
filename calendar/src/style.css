@@ -127,6 +127,14 @@
   position: relative;
 }
 
+.hidden {
+  display: none;
+}
+
+.day .current--line {
+  border: 1px solid #ff8000;
+}
+
 .event {
   background-color: rgba(22, 202, 187, 0.534);
   padding: var(--space) calc(var(--space) /2);

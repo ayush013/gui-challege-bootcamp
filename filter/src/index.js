@@ -13,8 +13,8 @@ class Main {
   initializeApp = async () => {
     this.resultContainer = document.querySelector(".results-grid");
     this.store = [];
-    this.activeFilter = "all";
     this.previousRenderedNodes = [];
+    this.activeFilter = "all";
 
     const data = await ApiUtil.getData();
     this.store = data.map((img) => new ImageNode(img));
@@ -84,8 +84,11 @@ class Main {
   };
 
   animateNodes(data) {
+    const isFirstRender = this.previousRenderedNodes.length === 0;
     data.forEach((image) => {
-      if (this.previousRenderedNodes.find((id) => id === image.id)) {
+      if (isFirstRender) {
+        image.calculateLayoutBounds();
+      } else if (this.previousRenderedNodes.find((id) => id === image.id)) {
         image.initFlipAnimation();
       } else {
         image.getDefaultAnimation();
